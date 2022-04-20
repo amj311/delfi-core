@@ -1,4 +1,4 @@
-import { TransactionEvent } from "./models";
+import { TransactionEvent } from "../models/transactions/TransactionEvent";
 
 export default class TransactionService {
     static generateEventsBetween(start,end,tranSchedule) {

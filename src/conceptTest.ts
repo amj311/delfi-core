@@ -1,14 +1,12 @@
-import {
-    Account,
-    TransactionSchedule,
-    XPerMonthSchedule,
-    TransactionTemplate,
-    OneTimeSchedule,
-    TransactionType,
-} from "./models";
-import { MONTHS } from "./constants";
-import { newMoment } from "./dateUtils";
-import ForecastService from "./forecastService";
+import { Account } from "./models/Account";
+import { TransactionSchedule } from "./models/transactions/TransactionSchedule";
+import { TransactionTemplate } from "./models/transactions/TransactionTemplate";
+import { TransactionType } from "./models/transactions/TransactionType";
+import { OneTimeSchedule } from "./models/schedules/OneTimeSchedule";
+import { XPerMonthSchedule } from "./models/schedules/XPerMonthSchedule";
+import { MONTHS } from "./utils/constants";
+import { newMoment } from "./utils/dateUtils";
+import ForecastService from "./services/forecastService";
 
 const checkingID = "checkingId";
 let initialAccounts = [

@@ -1,5 +1,9 @@
-import { newMoment } from "./dateUtils";
-import { MonthSummary, Snapshot, Account, TransactionType, TransactionEvent } from "./models";
+import { newMoment } from "../utils/dateUtils";
+import { Account } from "../models/Account";
+import { TransactionEvent } from "../models/transactions/TransactionEvent";
+import { MonthSummary } from "../models/MonthSummary";
+import { Snapshot } from "../models/Snapshot";
+import { TransactionType } from "../models/transactions/TransactionType";
 import TransactionService from "./transactionService";
 
 export default class ForecastService {
