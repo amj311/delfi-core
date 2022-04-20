@@ -1,0 +1,28 @@
+{
+  "name": "delfi-core",
+  "version": "1.0.0",
+  "description": "Core libraries for Delfi budgeting tools",
+  "main": "dist/index.js",
+  "types": "src/types.d.ts",
+  "module": "commonjs",
+  "scripts": {
+    "build": "webpack",
+    "build:dev": "tsc --watch --preserveWatchOutput --outDir dev",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@jest/globals": "^27.3.1",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^14.14.22",
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7",
+    "ts-loader": "^8.0.17",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.5",
+    "webpack": "^5.21.2",
+    "webpack-cli": "^4.9.2"
+  },
+  "dependencies": {
+  }
+}
