@@ -53,7 +53,7 @@ export class MonthSummary {
 
         console.log("End Balance:");
         for (let acct of this.getEndBalances().values()) {
-            let msg = acct.balance < 0 ? '🔴 NEGATIVE BALANCE !!!' : '';
+            let msg = acct.balance < 0 ? ' 🚨' : '';
             console.log("  " + acct.toString() + msg);
         }
     }
