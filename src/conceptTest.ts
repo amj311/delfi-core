@@ -8,13 +8,16 @@ import { MONTHS } from "./utils/constants";
 import { newMoment } from "./utils/dateUtils";
 import ForecastService from "./services/forecastService";
 import moment from "moment";
+import { ForecastTree } from "./models/Forecast";
+import { Snapshot } from "./models/Snapshot";
+import { TransactionEvent } from "./models/transactions/TransactionEvent";
 
 let accounts = {
     afcu_checking: new Account("1", "AFCU Checking", 500),
     afcu_savings: new Account("2", "AFCU Savings", 5500),
     rothIra: new Account("3", "ROTH IRA", 6500),
+    hsa: new Account("5", "HSA", 0),
     us_savings: new Account("4", "US Bank", 22000),
-    // new Account("savings",1500),
 };
 
 let initialAccounts = Object.values(accounts);
@@ -93,7 +96,7 @@ let scheduledTransactions = [
      */
     new TransactionSchedule(
         "Mortgage",
-        new TransactionTemplate(TransactionType.Expense,"Mortgage",2160, accounts.afcu_checking.id),
+        new TransactionTemplate(TransactionType.Expense,"Mortgage",2183, accounts.afcu_checking.id),
         new XPerMonthSchedule(1, new Date(2022,MONTHS.JUN,5))
     ),
     new TransactionSchedule(
@@ -114,7 +117,7 @@ let scheduledTransactions = [
     
     new TransactionSchedule(
         "Health Insurance",
-        new TransactionTemplate(TransactionType.Expense,"Health Insurance",514, accounts.afcu_checking.id),
+        new TransactionTemplate(TransactionType.Expense,"Health Insurance",188, accounts.afcu_checking.id),
         new XPerMonthSchedule(1, new Date(2022,MONTHS.JUN,30))
     ),
 
@@ -125,17 +128,27 @@ let scheduledTransactions = [
      */
     new TransactionSchedule(
         "Car",
-        new TransactionTemplate(TransactionType.Transfer,"New Car Fund",250, accounts.us_savings.id, accounts.afcu_checking.id),
+        new TransactionTemplate(TransactionType.Transfer,"New Car Fund", 250, accounts.us_savings.id, accounts.afcu_checking.id),
         new XPerMonthSchedule(1, new Date(2022,MONTHS.MAY,30))
     ),
     new TransactionSchedule(
         "roth",
-        new TransactionTemplate(TransactionType.Transfer,"RothIRA Fund",250, accounts.rothIra.id, accounts.afcu_checking.id),
+        new TransactionTemplate(TransactionType.Transfer,"RothIRA Fund", 325, accounts.rothIra.id, accounts.afcu_checking.id),
+        new XPerMonthSchedule(1, new Date(2022,MONTHS.MAY,30))
+    ),
+    new TransactionSchedule(
+        "roth-clozd",
+        new TransactionTemplate(TransactionType.Transfer,"RothIRA Clozd", 162, accounts.rothIra.id, accounts.afcu_checking.id),
         new XPerMonthSchedule(1, new Date(2022,MONTHS.MAY,30))
     ),
     new TransactionSchedule(
         "Emergency",
-        new TransactionTemplate(TransactionType.Transfer,"Emergency Fund",500, accounts.afcu_savings.id, accounts.afcu_checking.id),
+        new TransactionTemplate(TransactionType.Transfer,"Emergency Fund", 600, accounts.afcu_savings.id, accounts.afcu_checking.id),
+        new XPerMonthSchedule(1, new Date(2022,MONTHS.MAY,30))
+    ),
+    new TransactionSchedule(
+        "clozdHSA",
+        new TransactionTemplate(TransactionType.Income,"Clozd HSA Contribution", 158, accounts.hsa.id, accounts.afcu_checking.id),
         new XPerMonthSchedule(1, new Date(2022,MONTHS.MAY,30))
     ),
 
@@ -151,6 +164,18 @@ let scheduledTransactions = [
         new OneTimeSchedule(new Date(2022,MONTHS.AUG,30))
     ),
 
+    new TransactionSchedule(
+        "LegoLand Trip",
+        new TransactionTemplate(TransactionType.Expense,"LEGOLAND", 350, accounts.afcu_savings.id),
+        new OneTimeSchedule(new Date(2022,MONTHS.MAY,15))
+    ),
+
+    new TransactionSchedule(
+        "sanfran",
+        new TransactionTemplate(TransactionType.Expense,"San Francisco", 600, accounts.afcu_savings.id),
+        new OneTimeSchedule(new Date(2022,MONTHS.JUN,15))
+    ),
+
 
 
   ]
@@ -159,15 +184,13 @@ let scheduledTransactions = [
 let forecast = ForecastService.computeForecast(initialAccounts, scheduledTransactions,
                     newMoment(Date.now()), moment().endOf('year'))
 
-for (let month of forecast) {
-    month.printReport();
-}
+// for (let month of forecast) {
+//     month.printReport();
+// }
 
 
-// let start = newMoment(new Date(2022, MONTHS.JAN, 5))
-// let day2 = newMoment(new Date(2022,MONTHS.NOV,6))
-
-// let sched = new XPerMonthSchedule(2,new Date(2022,MONTHS.JAN,31))
-// console.log(sched.getOccurrencesBetween(start,day2))
-
-// console.log(day2.diff(start, 'M'))
+let forecastTest = new ForecastTree();
+forecastTest.addNextInOrder(new Snapshot([], new TransactionEvent(scheduledTransactions[0].template, newMoment('2022-04-08'))))
+forecastTest.addNextInOrder(new Snapshot([], new TransactionEvent(scheduledTransactions[0].template, newMoment('2022-04-10'))))
+forecastTest.addNextInOrder(new Snapshot([], new TransactionEvent(scheduledTransactions[0].template, newMoment('2022-04-05'))))
+console.log(forecastTest)

@@ -22,7 +22,7 @@ export default class ForecastService {
         for (let a  of initialBalances){
             accounts.set(a.id,a)
         }
-    
+
         let accountsCopy = this.copyAccounts(accounts)
         let monthlySummaries: MonthSummary[] = [];
         let month = new MonthSummary(now, this.copyAccounts(accounts));
@@ -53,16 +53,6 @@ export default class ForecastService {
                 target.balance += details.amount
                 origin.balance -= details.amount
             }
-
-            // Nice logging per transaction, could be useful somewhere.
-            //
-            // console.log("\n--- "+format(event.date)+" ---")
-            // let sign = details.amount > 0 ? '💹' : '🔻'
-            // console.log(sign+" $"+Math.abs(details.amount)+" for "+details.memo)
-            // console.log(changedAccount.toString())
-            // if (changedAccount.balance < 0) {
-            //     console.log("⭕ NEGATIVE BALANCE !!!")
-            // }
 
             month.addSnapshot(new Snapshot(accountsCopy,event))
         }
